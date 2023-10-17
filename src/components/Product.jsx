@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import ProductItem from './ProductItem';
 
 const Product = () => {
@@ -8,6 +8,7 @@ const Product = () => {
     const [copyData, setCopyData] = useState([]);
     const [cat, setCat] = useState([]);
     const [sendCat, setSendCat] = useState([]);
+    const [txt, setTxt] = useState("")
 
     const getApi = async () => {
         const result = await axios.get("https://fakestoreapi.com/products");
@@ -26,10 +27,19 @@ const Product = () => {
         setData(filt);
     }, [sendCat])
 
+    useEffect(() => {
+        const filt = copyData.filter((item) => item.category.toUpperCase().includes(txt.toUpperCase()));
+        setData(filt)
+    }, [txt])
+
 
 
     return (
         <Grid container spacing={3}>
+
+            <Grid item xs={12}>
+                <TextField onChange={(e) => setTxt(e.target.value)} variant='outlined' label='Search Here...' fullWidth />
+            </Grid>
             {
                 cat.map((item) => (
                     <Grid item xs={3}>
